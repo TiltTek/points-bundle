@@ -4,6 +4,26 @@ All notable changes to `tilttek/points-bundle` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](https://keepachangelog.com/) principles.
 
+## 0.2.0-alpha - 2026-11-14
+
+### Changed
+
+- `PointsTables` adds a third table, `tilttek_points_lots`, which keeps the checkpoint of each account's lots in a
+  currency, as JSON at a position; the application's next migration creates it.
+- `DbalLedger` implements `Ledger::appendAfter()` under the lock row of the debited account, which payments take too,
+  and `keptLots()` and `keepLots()` on `tilttek_points_lots`; forgetting the derived movements and erasing a member
+  delete the checkpoints.
+- The bundle requires `tilttek/points` `^0.2@dev`, whose `Ledger::appendAfter()`, `keptLots()` and `keepLots()`
+  `DbalLedger` implements.
+
+### Fixed
+
+- An expiry no longer leaves a balance below zero when a spending of the same account slips between its read of the
+  lots and its write, and no longer reads the whole history of the account at each spending.
+- `PointsPrivacy` implements `Phil\PrivacyBundle\Application\Contract\PersonalDataExporter` and `PersonalDataEraser`,
+  the interfaces `phil/privacy-bundle` exposes, and the bundle registers it when they exist: the export and the
+  erasure of a member now reach it.
+
 ## 0.1.0-alpha - 2026-11-11
 
 ### Added
